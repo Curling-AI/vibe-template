@@ -67,11 +67,9 @@ import { useTheme } from '@/hooks/useTheme'
 
 function MyComponent() {
   const { theme, setTheme } = useTheme()
-  
+
   return (
-    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-      Alternar tema
-    </button>
+    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>Alternar tema</button>
   )
 }
 ```
