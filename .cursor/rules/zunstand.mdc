@@ -1,0 +1,8 @@
+---
+description:
+globs: src/stores/**/*.ts
+alwaysApply: false
+---
+# Important State Management Rules
+- Keep state small
+- Split state into multiple files when it gets too big

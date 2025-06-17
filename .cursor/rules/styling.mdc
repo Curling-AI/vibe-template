@@ -1,0 +1,7 @@
+---
+description:
+globs: *.css,*.tsx
+alwaysApply: false
+---
+# Important tailwind rules
+- Use tailwind version 3
