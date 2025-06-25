@@ -23,3 +23,6 @@ export const useStore = create(
       }),
   })),
 )
+
+// Store de usuários
+export * from './userStore'

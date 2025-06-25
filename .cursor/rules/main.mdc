@@ -18,6 +18,7 @@ root/                       -> The project directory
 │   ├── pages/              -> All page components must live here
 │   ├── providers/          -> Visual component data that must available to all component tree
 │   ├── stores/             -> All component state, both shared and page specific, must live here. Use zustand stores.
+│   ├── services/           -> All data persistence, fetch, model logic must be defined here before being used inside stores.
 │   ├── App.tsx             -> The Main App component, it contains the routing configuration, pages and providers instantiation
 │   ├── index.css           -> The main application styles (mostly theme and animation configuration). Use tailwind.
 │   ├── main.tsx            -> The main App entripoint (instantiation)
@@ -29,6 +30,7 @@ root/                       -> The project directory
 
 #### Code Style and Structure
 - Write concise, technical JavaScript code.
+- Avoid files with more than 250 lines of code, if it reaches that point, refactor the file to make it smaller
 - Use functional and declarative programming patterns; avoid classes.
 - Prefer iteration and modularization over code duplication.
 - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).

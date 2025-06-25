@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { UserStatusWidget } from '@/components/UserStatusWidget'
 import reactLogo from '../assets/react.svg'
 import viteLogo from '/vite.svg'
 import { useStore } from '@/stores'
@@ -43,13 +44,27 @@ function Index() {
         </p>
       </div>
 
-      <div className="mt-8">
-        <Link
-          to="/about"
-          className="text-primary-light dark:text-primary-dark no-underline text-lg hover:text-primary-dark dark:hover:text-primary-light transition-colors"
-        >
-          Ir para a página Sobre →
-        </Link>
+      <div className="mt-8 space-y-4">
+        <div>
+          <Link
+            to="/about"
+            className="text-primary-light dark:text-primary-dark no-underline text-lg hover:text-primary-dark dark:hover:text-primary-light transition-colors"
+          >
+            Ir para a página Sobre →
+          </Link>
+        </div>
+        <div>
+          <Link
+            to="/users"
+            className="text-primary-light dark:text-primary-dark no-underline text-lg hover:text-primary-dark dark:hover:text-primary-light transition-colors"
+          >
+            Gerenciar Usuários →
+          </Link>
+        </div>
+      </div>
+
+      <div className="mt-8 max-w-md mx-auto">
+        <UserStatusWidget />
       </div>
 
       <p className="text-muted-light dark:text-muted-dark mt-8">
