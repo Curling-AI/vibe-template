@@ -4,5 +4,8 @@ globs: src/stores/**/*.ts
 alwaysApply: false
 ---
 # Important State Management Rules
+- Use Zustand for global state management.
 - Keep state small
 - Split state into multiple files when it gets too big
+- Lift state up when needed to share state between components.
+- Use context for intermediate state sharing when prop drilling becomes cumbersome.

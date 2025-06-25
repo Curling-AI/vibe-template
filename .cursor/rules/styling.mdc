@@ -5,3 +5,6 @@ alwaysApply: false
 ---
 # Important tailwind rules
 - Use tailwind version 3
+- Use Shadcn UI and Radix UI for component foundations.
+- Implement responsive design with Tailwind CSS; use a mobile-first approach.
+
