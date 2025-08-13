@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import { CONFIG } from '../config'
 
 export interface ApiError extends Error {

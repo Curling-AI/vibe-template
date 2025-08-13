@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, type Request, type Response } from 'express'
 
 const router = Router()
 
@@ -48,7 +48,7 @@ router.get('/users', (req: Request, res: Response) => {
 })
 
 // GET /users/stats - Estatísticas dos usuários (deve vir antes de /:id)
-router.get('/users/stats', (req: Request, res: Response) => {
+router.get('/users/stats', (_req: Request, res: Response) => {
   const totalUsers = mockUsers.length
   const emailDomains = mockUsers.reduce(
     (acc, user) => {

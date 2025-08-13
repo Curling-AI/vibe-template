@@ -1,9 +1,9 @@
-import { Router, Request, Response } from 'express'
+import { Router, type Request, type Response } from 'express'
 
 const router = Router()
 
 // Health check endpoint
-router.get('/health', (req: Request, res: Response) => {
+router.get('/health', (_req: Request, res: Response) => {
   res.json({
     status: 'OK',
     timestamp: new Date().toISOString(),
@@ -13,7 +13,7 @@ router.get('/health', (req: Request, res: Response) => {
 })
 
 // Info endpoint
-router.get('/info', (req: Request, res: Response) => {
+router.get('/info', (_req: Request, res: Response) => {
   res.json({
     name: 'Vibe Template BFF',
     version: '1.0.0',
