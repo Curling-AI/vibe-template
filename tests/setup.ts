@@ -12,17 +12,19 @@ function getEnvVar(key: string, fallback: string): string {
 
 // Mock das variáveis de ambiente para testes
 // Carrega do .env com fallbacks apropriados para testes
-Object.defineProperty(import.meta, 'env', {
-  value: {
-    VITE_API_BASE_URL: getEnvVar('VITE_API_BASE_URL', 'http://localhost:3001'),
-    VITE_SUPABASE_URL: getEnvVar('VITE_SUPABASE_URL', 'https://test.supabase.co'),
-    VITE_SUPABASE_ANON_KEY: getEnvVar('VITE_SUPABASE_ANON_KEY', 'test-anon-key'),
-    NODE_ENV: getEnvVar('NODE_ENV', 'test'),
-    // Adiciona outras variáveis conforme necessário
-    FRONTEND_URL: getEnvVar('FRONTEND_URL', 'http://localhost:5173'),
-    PORT: getEnvVar('PORT', '3001'),
-  },
-  writable: true,
+const mockEnv = {
+  VITE_API_BASE_URL: getEnvVar('VITE_API_BASE_URL', 'http://localhost:3001'),
+  VITE_SUPABASE_URL: getEnvVar('VITE_SUPABASE_URL', 'https://test.supabase.co'),
+  VITE_SUPABASE_ANON_KEY: getEnvVar('VITE_SUPABASE_ANON_KEY', 'test-anon-key'),
+  NODE_ENV: getEnvVar('NODE_ENV', 'test'),
+  // Adiciona outras variáveis conforme necessário
+  FRONTEND_URL: getEnvVar('FRONTEND_URL', 'http://localhost:5173'),
+  PORT: getEnvVar('PORT', '3001'),
+}
+
+// Mock do import.meta.env para Vitest
+vi.stubGlobal('import.meta', {
+  env: mockEnv,
 })
 
 // Mock localStorage para testes

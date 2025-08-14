@@ -145,7 +145,7 @@ contexts/
 
 ```bash
 # Os workflows executam automaticamente:
-npm run lint && npx prettier --check .
+npm run lint && npm run format:check
 npm run test && npm run build
 ```
 
@@ -193,7 +193,8 @@ npm run docker:prod:ssl  # Produção com SSL
 # Qualidade
 npm test                 # Testes
 npm run lint             # ESLint
-npm run format           # Prettier
+npm run format           # Prettier (aplicar)
+npm run format:check     # Prettier (verificar)
 ```
 
 ## 🛠️ Tecnologias
