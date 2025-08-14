@@ -7,6 +7,7 @@ Template completo com React 19, TypeScript, Tailwind CSS, Zustand e Backend For 
 **Frontend:** React 19 • TypeScript • Vite • Tailwind CSS • React Router 7 • Zustand • Radix UI
 **Backend:** Express.js 5.0 • TypeScript • CORS • Morgan • Helmet
 **Auth:** Supabase • OAuth • Magic Links • Session Management
+**CI/CD:** GitHub Actions • Workflows automáticos • Deploy contínuo
 **Ferramentas:** Vitest • ESLint • Prettier • Docker • Traefik
 
 ## 🚀 Início Rápido
@@ -40,6 +41,7 @@ npm test                 # Executar testes
 │   ├── middleware/          # CORS, errors, security
 │   └── config/              # Configurações centralizadas
 ├── tests/                   # Testes Vitest
+├── contexts/                # Contexto para assistentes AI
 ├── docker/                  # Configuração Docker + Traefik
 └── .env.default             # Template de configuração
 ```
@@ -117,6 +119,36 @@ npm run docker:prod      # Produção com proxy (localhost)
 
 📖 **Documentação completa:** [docker/DOCKER.md](./docker/DOCKER.md)
 
+## 🤖 Contexto para AI (contexts/)
+
+**Diretório para assistentes de IA:** Armazena contexto e planejamento para desenvolvimento contínuo
+
+- **Propósito**: Documentar decisões, padrões e contexto para sessões futuras com IA
+- **Uso**: Adicione arquivos `.md` com contexto específico (features, bugs, refatorações)
+- **Benefícios**: Continuidade entre sessões • Histórico de decisões • Padrões estabelecidos
+
+```bash
+contexts/
+├── feature-auth.md          # Contexto da implementação de auth
+├── refactor-stores.md       # Planejamento de refatoração
+└── decisions.md             # Decisões arquiteturais
+```
+
+## ⚡ CI/CD (GitHub Actions)
+
+**Workflows automáticos:**
+
+- **CI**: Lint, testes e build em Node.js 20.x/22.x
+- **Deploy**: Staging automático (push main) + produção manual (exemplo)
+
+**Triggers:** Push/PR → main | Manual deploy | Schedule semanal
+
+```bash
+# Os workflows executam automaticamente:
+npm run lint && npm run format -- --check
+npm run test && npm run build
+```
+
 ## 🧪 Testes (Vitest + Supertest)
 
 **Cobertura:** API endpoints, Services, Stores Zustand, Supabase Auth
@@ -169,6 +201,7 @@ npm run format           # Prettier
 **Frontend:** React 19 • TypeScript • Vite • Tailwind CSS • React Router 7 • Zustand • Radix UI
 **Backend:** Express.js 5.0 • TypeScript • Helmet • Morgan • CORS
 **Auth:** Supabase • OAuth • Magic Links • Session Management
+**CI/CD:** GitHub Actions • Workflows automáticos • Deploy contínuo
 **Testes:** Vitest • Supertest • Mocks
 **Ferramentas:** ESLint • Prettier • Husky • Docker • Traefik
 

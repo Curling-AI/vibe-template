@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar lint
+        run: npm run lint
+
+      - name: Executar formatação
+        run: npm run format -- --check
+
+      - name: Executar testes
+        run: npm run test
+
+      - name: Executar build
+        run: npm run build
+
+      - name: Verificar arquivos de build
+        run: |
+          echo "Verificando se os arquivos de build foram criados..."
+          ls -la dist/
+          echo "Build app:"
+          ls -la dist/app/ || echo "Diretório app não encontrado"
+          echo "Build API:"
+          ls -la dist/api/ || echo "Diretório api não encontrado"
+
+      - name: Upload artefatos de build
+        uses: actions/upload-artifact@v4
+        if: matrix.node-version == '20.x'
+        with:
+          name: build-artifacts
+          path: |
+            dist/
+            !dist/**/*.map
+          retention-days: 7

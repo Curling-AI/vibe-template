@@ -1,0 +1,81 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Ambiente de deploy'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'staging' }}
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar testes antes do deploy
+        run: npm run test
+
+      - name: Executar build de produção
+        run: npm run build
+
+      - name: Configurar ambiente
+        run: |
+          if [ "${{ github.event.inputs.environment }}" = "production" ]; then
+            echo "Configurando para produção..."
+            npm run env:production
+          else
+            echo "Configurando para staging..."
+            npm run env:staging
+          fi
+
+      # Exemplo de deploy com Docker
+      - name: Build Docker images
+        run: |
+          echo "Building Docker images for ${{ github.event.inputs.environment || 'staging' }}..."
+          # Aqui você pode adicionar comandos específicos do seu ambiente de deploy
+          # Exemplo: docker build -t seu-app:${{ github.sha }} .
+
+      - name: Deploy para ${{ github.event.inputs.environment || 'staging' }}
+        run: |
+          echo "Deploying to ${{ github.event.inputs.environment || 'staging' }}..."
+          # Aqui você pode adicionar comandos específicos do seu ambiente de deploy
+          # Exemplos:
+          # - Deploy para Vercel: npx vercel --prod
+          # - Deploy para AWS: aws s3 sync dist/ s3://seu-bucket
+          # - Deploy para Docker: docker-compose up -d
+          # - Deploy para Kubernetes: kubectl apply -f k8s/
+
+      - name: Notificar sucesso do deploy
+        if: success()
+        run: |
+          echo "✅ Deploy realizado com sucesso para ${{ github.event.inputs.environment || 'staging' }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"
+
+      - name: Notificar falha do deploy
+        if: failure()
+        run: |
+          echo "❌ Deploy falhou para ${{ github.event.inputs.environment || 'staging' }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"

@@ -63,6 +63,7 @@ root/                       -> The project directory
 │   │       ├── authStore.test.ts -> Authentication store tests
 │   │       └── other store tests
 │   └── setup.ts            -> Test configuration
+├── contexts/               -> ⚠️  AI ASSISTANT CONTEXT - ALWAYS CONSULT!
 ├── index.html              -> The main HTML file where the app will be rendered
 ├── tailwind.config.js      -> The tailwind configuration, contains the theme config
 ├── vite.config.ts          -> Vite configuration including Vitest setup
@@ -108,6 +109,24 @@ root/                       -> The project directory
 - **User profile** updates and management
 - **Persistent authentication** state with Zustand
 
+### 🚨 CRITICAL RULE: Mandatory Context Consultation
+
+**ALWAYS consult the `contexts/` directory BEFORE executing any task.**
+
+#### Mandatory Flow:
+1. **Session start**: Execute `list_dir contexts/` or `read_file contexts/README.md`
+2. **Check context**: Read relevant files for the current task
+3. **Follow patterns**: Use documented decisions and patterns
+4. **Update context**: Document significant changes
+
+#### Context Files:
+- `contexts/README.md` - Context system usage guide
+- `contexts/decisions.md` - Architectural decisions and patterns
+- `contexts/feature-*.md` - Context for specific features
+- `contexts/refactor-*.md` - Refactoring planning
+
+This rule ensures continuity, consistency and quality in development.
+
 ### Project guidelines
 
 #### Code Style and Structure
@@ -120,7 +139,7 @@ root/                       -> The project directory
 
 #### Naming Conventions
 - Use lowercase with dashes for directories (e.g., components/auth-wizard).
-- Use PascalCase for components (e.d., pages/About.tsx)
+- Use PascalCase for components (e.g., pages/About.tsx)
 - Favor named exports for components.
 
 #### React Best Practices
@@ -181,7 +200,7 @@ root/                       -> The project directory
 
 #### Forms and Validation
 - Use controlled components for form inputs.
-- Implement form validation uzing zod.
+- Implement form validation using zod.
 - Consider using libraries like ShadCN FormField component with react-hook-form for complex forms.
 - Use Zod for schema validation.
 
