@@ -5,10 +5,10 @@ export * from './api'
 export * from './types'
 
 // Exportar serviços específicos
-export * from './userService'
+export * from './clicksService'
 
 // Exportar serviços como objetos para uso direto
-export { userService } from './userService'
+export { clicksService } from './clicksService'
 
 // Re-exportar a instância da API para uso direto quando necessário
 export { api } from './api'

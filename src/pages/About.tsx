@@ -1,21 +1,21 @@
+// This is a example page, you can remove it if you don't need it
+
 import { Link } from 'react-router-dom'
-import { ThemeToggle } from '@/components/ThemeToggle'
-import { useStore } from '@/stores'
+import { useClicks } from '@/stores'
 
 function About() {
-  const { shared } = useStore()
+  const { clicks } = useClicks()
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-bold">Sobre Nós</h1>
-        <ThemeToggle />
       </div>
 
       <div className="space-y-6 text-left">
         <p className="text-lg text-muted-foreground">Esta é a página sobre nós!</p>
 
-        <p className="text-lg text-muted-foreground">Total de cliques: {shared.countTotal}</p>
+        <p className="text-lg text-muted-foreground">Total de cliques: {clicks}</p>
 
         <p className="text-base leading-relaxed">
           Aqui você pode encontrar informações sobre nossa aplicação construída com:
@@ -29,6 +29,7 @@ function About() {
           <li>Tailwind CSS 3</li>
           <li>Tema Dark/Light</li>
           <li>Radix UI Components</li>
+          <li>Zustand</li>
         </ul>
 
         <div className="pt-8 border-t border-border">

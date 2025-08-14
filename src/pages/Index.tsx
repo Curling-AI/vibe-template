@@ -1,20 +1,22 @@
+// Important: This is an example page, raplace all content and styles with your own
+
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/ThemeToggle'
-import { UserStatusWidget } from '@/components/UserStatusWidget'
 import reactLogo from '../assets/react.svg'
 import viteLogo from '/vite.svg'
-import { useStore } from '@/stores'
+import { useClicks, useClickActions } from '@/stores'
 
 function Index() {
-  const { index, increment } = useStore()
+  const { clicks } = useClicks()
+  const { fetchClicks, updateClicks } = useClickActions()
+
+  useEffect(() => {
+    fetchClicks()
+  }, [])
 
   return (
-    <div className="w-full">
-      <div className="flex justify-end mb-4">
-        <ThemeToggle />
-      </div>
-
+    <div>
       <div className="flex flex-row gap-4 justify-center items-center mb-8">
         <a href="https://vite.dev" target="_blank">
           <img
@@ -35,8 +37,8 @@ function Index() {
       <h1 className="mb-8">Vite + React</h1>
 
       <div className="p-8 mb-8">
-        <Button variant="outline" onClick={() => increment()}>
-          count is {index.count}
+        <Button variant="outline" onClick={() => updateClicks()}>
+          count is {clicks}
         </Button>
         <p className="mt-4">
           Edit <code className="font-mono bg-muted px-2 py-1 rounded">src/App.tsx</code> and save to
@@ -53,18 +55,6 @@ function Index() {
             Ir para a página Sobre →
           </Link>
         </div>
-        <div>
-          <Link
-            to="/users"
-            className="text-primary-light dark:text-primary-dark no-underline text-lg hover:text-primary-dark dark:hover:text-primary-light transition-colors"
-          >
-            Gerenciar Usuários →
-          </Link>
-        </div>
-      </div>
-
-      <div className="mt-8 max-w-md mx-auto">
-        <UserStatusWidget />
       </div>
 
       <p className="text-muted-light dark:text-muted-dark mt-8">

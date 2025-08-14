@@ -58,23 +58,25 @@ npm run format           # Formatar código com Prettier
 ├── src/                      # Frontend
 │   ├── assets/               # Recursos estáticos
 │   ├── components/           # Componentes React
-│   │   ├── ui/              # Componentes base (Button, etc.)
-│   │   ├── ThemeToggle.tsx  # Botão alternador de tema
-│   │   ├── UserCard.tsx     # Card de usuário
-│   │   ├── UserForm.tsx     # Formulário de usuário
-│   │   └── UserStatusWidget.tsx # Widget de status
+│   │   ├── ui/              # Componentes base (Button, Dialog, etc.)
+│   │   ├── Layout.tsx       # Layout principal da aplicação
+│   │   └── ThemeToggle.tsx  # Botão alternador de tema
 │   ├── hooks/               # Custom hooks
+│   │   └── useTheme.ts      # Hook de gerenciamento de tema
 │   ├── lib/                 # Utilitários (cn, utils.ts)
 │   ├── pages/               # Páginas da aplicação
 │   │   ├── Index.tsx        # Página inicial
-│   │   ├── About.tsx        # Página sobre
-│   │   └── Users.tsx        # Página de usuários
+│   │   └── About.tsx        # Página sobre
 │   ├── providers/           # Context providers
 │   │   └── ThemeProvider.tsx # Contexto do tema
 │   ├── services/            # Serviços de API
+│   │   ├── api.ts           # Configuração base da API
+│   │   ├── clicksService.ts # Serviço de clicks
+│   │   ├── index.ts         # Exportações dos serviços
+│   │   └── types.ts         # Tipos TypeScript
 │   ├── stores/              # Stores Zustand
-│   │   ├── index.ts         # Configuração das stores
-│   │   └── userStore.ts     # Store de usuários
+│   │   ├── clickStore.ts    # Store de clicks
+│   │   └── index.ts         # Configuração das stores
 │   ├── App.tsx              # Configuração de rotas
 │   ├── main.tsx             # Ponto de entrada
 │   ├── index.css            # Estilos globais
@@ -84,11 +86,21 @@ npm run format           # Formatar código com Prettier
 │   ├── config/              # Configurações da aplicação
 │   │   └── index.ts         # Configurações centralizadas
 │   ├── middleware/          # Middlewares customizados
+│   │   ├── cors.ts          # Configuração CORS
+│   │   └── errorHandler.ts  # Tratamento de erros
 │   ├── routes/              # Definição das rotas
 │   │   ├── health.ts        # Endpoints de health check
 │   │   └── api.ts           # Rotas da API
 │   ├── app.ts               # Configuração da aplicação Express
 │   └── index.ts             # Ponto de entrada do servidor
+│
+├── tests/                   # Testes automatizados
+│   ├── api/                 # Testes da API (backend)
+│   │   └── api.test.ts      # Testes dos endpoints
+│   ├── app/                 # Testes do frontend
+│   │   ├── services/        # Testes dos serviços
+│   │   └── stores/          # Testes das stores
+│   └── setup.ts             # Configuração dos testes
 │
 ├── public/                  # Arquivos públicos
 ├── dist/                    # Arquivos compilados (gerado)
@@ -97,7 +109,7 @@ npm run format           # Formatar código com Prettier
 ├── tsconfig.json            # Configuração TypeScript (raiz)
 ├── tsconfig.api.json        # Configuração TypeScript (API)
 ├── tsconfig.app.json        # Configuração TypeScript (App)
-├── vite.config.ts           # Configuração Vite
+├── vite.config.ts           # Configuração Vite e Vitest
 ├── nodemon.json             # Configuração Nodemon
 └── package.json             # Dependências e scripts
 ```
@@ -141,16 +153,17 @@ O projeto utiliza **Zustand** para gerenciamento de estado global, proporcionand
 ### Exemplo de Uso
 
 ```tsx
-import { useUserStore } from '@/stores/userStore'
+import { useClickStore } from '@/stores/clickStore'
 
-function UserComponent() {
-  const { users, addUser, updateUser } = useUserStore()
+function ClickComponent() {
+  const { clicks, isLoading, fetchClicks, updateClicks } = useClickStore()
 
   return (
     <div>
-      {users.map((user) => (
-        <div key={user.id}>{user.name}</div>
-      ))}
+      <p>Clicks: {clicks}</p>
+      <button onClick={updateClicks} disabled={isLoading}>
+        {isLoading ? 'Carregando...' : 'Incrementar'}
+      </button>
     </div>
   )
 }
@@ -160,18 +173,44 @@ function UserComponent() {
 
 O projeto usa React Router v7 com:
 
-- **Páginas**: `Index` (/), `About` (/about) e `Users` (/users)
+- **Páginas**: `Index` (/) e `About` (/about)
+- **Layout**: Componente `Layout` aplicado a todas as rotas
 - **Navegação**: Links com `react-router-dom`
 - **Estrutura**: Páginas organizadas em `src/pages/`
+- **Outlet**: Renderização dinâmica de conteúdo através do Layout
 
 ## 🎯 Componentes UI
 
 Baseados em Radix UI com Tailwind CSS:
 
 - **Button**: Múltiplas variantes e tamanhos
+- **Dialog**: Modais acessíveis
+- **Layout**: Componente de layout principal da aplicação
 - **ThemeToggle**: Botão para alternar tema
 - **Tipagem**: TypeScript completo
 - **Acessibilidade**: Suporte a teclado e screen readers
+
+### Layout Principal
+
+O componente `Layout` fornece a estrutura base para todas as páginas:
+
+```tsx
+import Layout from '@/components/Layout'
+
+// Usado automaticamente em todas as rotas através do React Router
+;<Route element={<Layout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/about" element={<About />} />
+</Route>
+```
+
+**Funcionalidades do Layout:**
+
+- **Estrutura responsiva**: Container centralizado com largura máxima
+- **Theme toggle**: Botão de alternância de tema posicionado no canto superior direito
+- **Flexbox**: Layout flexível com centralização vertical e horizontal
+- **Outlet**: Renderiza as páginas filhas através do React Router
+- **Padding**: Espaçamento interno consistente em todas as páginas
 
 ## 🔧 Backend (BFF)
 
@@ -206,9 +245,8 @@ As configurações são gerenciadas através do arquivo `api/config/index.ts` e 
 
 #### API de Exemplo
 
-- `GET /api/v1/users` - Listar usuários
-- `GET /api/v1/users/:id` - Obter usuário por ID
-- `POST /api/v1/users` - Criar novo usuário
+- `GET /api/v1/clicks` - Obter contador atual de clicks
+- `PUT /api/v1/clicks` - Incrementar contador de clicks
 
 ### Desenvolvimento Backend
 
@@ -233,6 +271,112 @@ O servidor será iniciado na porta 3001 (ou na porta definida na variável PORT)
   - Rate limiting pode ser adicionado futuramente
   - Validação de entrada deve ser implementada conforme necessário
 
+## 🧪 Testes
+
+O projeto conta com uma suíte de testes abrangente, cobrindo tanto o backend (API) quanto o frontend (services e stores).
+
+### Estrutura de Testes
+
+```
+tests/
+├── api/                    # Testes da API (backend)
+│   └── api.test.ts        # Testes dos endpoints da API
+├── app/                   # Testes do frontend
+│   ├── services/          # Testes dos serviços
+│   │   ├── api.test.ts    # Testes do serviço base da API
+│   │   └── clicksService.test.ts # Testes do serviço de clicks
+│   └── stores/            # Testes das stores Zustand
+│       └── clickStore.test.ts # Testes da store de clicks
+└── setup.ts               # Configuração inicial dos testes
+```
+
+### Frameworks e Ferramentas
+
+- **Vitest** 3.2.4 - Framework de testes moderno baseado em Vite
+- **Supertest** 7.1.4 - Testes de integração para APIs Express
+- **Mocking** - Mocks automáticos com `vi.mock()` do Vitest
+- **TypeScript** - Suporte completo a tipagem nos testes
+
+### Tipos de Testes
+
+#### 🔧 Testes de API (Backend)
+
+- **Endpoints**: Testa todas as rotas da API (`/api/v1/clicks`)
+- **Health Check**: Verifica endpoints de monitoramento
+- **CORS**: Valida configuração de Cross-Origin
+- **Middleware**: Testa comportamento de middlewares
+- **Códigos HTTP**: Verifica respostas e status codes corretos
+
+#### 🎯 Testes de Services (Frontend)
+
+- **Integração com API**: Testa comunicação com o backend
+- **Tratamento de Erros**: Valida propagação de erros
+- **Mocking**: Usa mocks para isolar dependências
+- **Tipos TypeScript**: Garante tipagem correta das respostas
+
+#### 📦 Testes de Stores (Frontend)
+
+- **Estado Global**: Testa gerenciamento de estado com Zustand
+- **Actions**: Valida todas as ações da store
+- **Loading States**: Verifica estados de carregamento
+- **Error Handling**: Testa tratamento de erros
+- **Hooks Customizados**: Valida hooks derivados da store
+
+### Comandos de Teste
+
+```bash
+# Executar todos os testes
+npm test
+
+# Executar testes em modo watch (desenvolvimento)
+npm run test:watch
+
+# Executar testes com coverage
+npm run test:coverage
+
+# Executar apenas testes da API
+npm test -- tests/api
+
+# Executar apenas testes do frontend
+npm test -- tests/app
+```
+
+### Configuração
+
+Os testes são configurados através do `vite.config.ts` com:
+
+- **Environment**: Node.js para testes de API
+- **Setup Files**: Configuração inicial em `tests/setup.ts`
+- **Globals**: APIs globais do Vitest (`describe`, `it`, `expect`)
+- **Mocking**: Mocks automáticos de variáveis de ambiente
+
+### Exemplo de Teste
+
+```typescript
+// Teste de Service
+describe('ClicksService', () => {
+  it('deve buscar clicks com sucesso', async () => {
+    const mockResponse = { data: { clicks: 10 } }
+    mockApi.get.mockResolvedValueOnce(mockResponse)
+
+    const result = await clicksService.getClicks()
+
+    expect(mockApi.get).toHaveBeenCalledWith('/clicks')
+    expect(result).toEqual(mockResponse)
+  })
+})
+
+// Teste de Store
+describe('ClickStore', () => {
+  it('deve atualizar estado corretamente', async () => {
+    const clicks = await useClickStore.getState().fetchClicks()
+
+    expect(useClickStore.getState().clicks).toBe(10)
+    expect(useClickStore.getState().isLoading).toBe(false)
+  })
+})
+```
+
 ## 📋 Scripts Disponíveis
 
 ### Scripts Principais (Raiz do Projeto)
@@ -246,6 +390,9 @@ npm run dev:api         # Apenas backend (Express - porta 3001)
 
 # Build
 npm run build           # Build do frontend (TypeScript + Vite)
+
+# Testes
+npm test                # Executar todos os testes
 
 # Execução
 npm run start:frontend  # Preview do frontend compilado
@@ -311,6 +458,13 @@ npm run preview         # Testa o build localmente
 - **Concurrently** 9.2.0 - Execução paralela de scripts
 - **Nodemon** 3.1.10 - Hot reload para desenvolvimento
 - **TSX** 4.20.4 - Executor TypeScript
+
+### Ferramentas de Teste
+
+- **Vitest** 3.2.4 - Framework de testes baseado em Vite
+- **Supertest** 7.1.4 - Testes de integração para APIs HTTP
+- **Mocks** - Sistema de mocking integrado do Vitest
+- **Coverage** - Relatórios de cobertura de código integrados
 
 ## 📄 Licença
 

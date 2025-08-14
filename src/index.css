@@ -66,30 +66,9 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    min-height: 100vh;
-    display: flex;
-    place-items: center;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  #root {
-    @apply max-w-screen-xl mx-auto p-8 text-center;
-    min-width: 320px;
-  }
-
-  h1 {
-    @apply text-5xl font-bold leading-tight;
-  }
-
-  a {
-    @apply font-medium text-primary-light dark:text-primary-dark no-underline;
-    transition: color 0.25s;
-  }
-
-  a:hover {
-    @apply text-primary-dark dark:text-primary-light;
   }
 }
