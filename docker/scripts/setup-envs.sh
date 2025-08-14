@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script para configurar domínios do Docker facilmente
-# Uso: ./setup-domains.sh [ambiente]
+# Script para configurar variáveis de ambiente facilmente
+# Uso: ./setup-envs.sh [ambiente]
 # Ambientes: local, staging, production
 
 set -e
@@ -9,7 +9,7 @@ set -e
 ENVIRONMENT=${1:-"local"}
 ENV_FILE=".env"
 
-echo "🔧 Configurando ambiente: $ENVIRONMENT"
+echo "🔧 Configurando variáveis de ambiente: $ENVIRONMENT"
 
 case $ENVIRONMENT in
   "local")
@@ -40,6 +40,10 @@ VITE_API_BASE_URL=http://localhost:3001
 FRONTEND_PORT=5173
 API_PORT=3001
 TRAEFIK_PORT=8080
+
+# Supabase (Autenticação)
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 EOF
     echo "✅ Configuração local criada em $ENV_FILE"
     echo "🌐 Frontend: http://localhost"
@@ -78,6 +82,10 @@ VITE_API_BASE_URL=https://api-staging.$BASE_DOMAIN
 FRONTEND_PORT=5173
 API_PORT=3001
 TRAEFIK_PORT=8080
+
+# Supabase (Autenticação)
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 EOF
     echo "✅ Configuração staging criada em $ENV_FILE"
     echo "🌐 Frontend: https://staging.$BASE_DOMAIN"
@@ -123,6 +131,10 @@ VITE_API_BASE_URL=https://api.$BASE_DOMAIN
 FRONTEND_PORT=5173
 API_PORT=3001
 TRAEFIK_PORT=8080
+
+# Supabase (Autenticação)
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 EOF
     echo "✅ Configuração produção criada em $ENV_FILE"
     echo "🌐 Frontend: https://$BASE_DOMAIN"
@@ -141,11 +153,20 @@ esac
 
 echo ""
 echo "📋 Próximos passos:"
-echo "1. Configure DNS para apontar os domínios para este servidor"
-echo "2. Execute: npm run docker:prod"
-echo "3. Aguarde os certificados SSL serem gerados automaticamente"
+echo "1. Configure as variáveis do Supabase:"
+echo "   - VITE_SUPABASE_URL: URL do seu projeto Supabase"
+echo "   - VITE_SUPABASE_ANON_KEY: Chave anônima do Supabase"
+echo "2. Configure DNS para apontar os domínios para este servidor (se necessário)"
+echo "3. Execute: npm run docker:prod"
+echo "4. Aguarde os certificados SSL serem gerados automaticamente"
 echo ""
 echo "📄 Arquivo de configuração gerado: $ENV_FILE"
+echo ""
+echo "🔑 Para obter as variáveis do Supabase:"
+echo "   1. Acesse https://supabase.com"
+echo "   2. Crie um novo projeto"
+echo "   3. Vá para Settings > API"
+echo "   4. Copie a URL e a chave anônima"
 echo ""
 echo "💡 Dica: Para usar um template base, copie o arquivo .env.default:"
 echo "   cp .env.default .env"

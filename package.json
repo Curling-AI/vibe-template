@@ -26,9 +26,9 @@
     "docker:logs": "docker-compose logs -f",
     "docker:clean": "docker system prune -a",
     "env:init": "cp .env.default .env",
-    "env:local": "docker/scripts/setup-domains.sh local",
-    "env:staging": "docker/scripts/setup-domains.sh staging",
-    "env:production": "docker/scripts/setup-domains.sh production"
+    "env:local": "docker/scripts/setup-envs.sh local",
+    "env:staging": "docker/scripts/setup-envs.sh staging",
+    "env:production": "docker/scripts/setup-envs.sh production"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
@@ -37,10 +37,12 @@
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.3",
+    "@supabase/supabase-js": "^2.55.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
     "lucide-react": "^0.539.0",
@@ -51,8 +53,7 @@
     "react-router-dom": "^7.8.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
-    "zustand": "^5.0.7",
-    "dotenv": "^17.2.1"
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

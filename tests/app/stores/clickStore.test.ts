@@ -2,6 +2,14 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { useClickStore } from '../../../src/stores/clickStore'
 import * as clicksServiceModule from '../../../src/services/clicksService'
 
+// Mock do authService para evitar carregamento do config Supabase
+vi.mock('../../../src/services/auth/config', () => ({
+  supabase: {},
+  supabaseConfig: {},
+  isSupabaseConfigured: () => false,
+  getSupabaseInfo: () => ({}),
+}))
+
 // Mock do clicksService
 vi.mock('../../../src/services/clicksService', () => ({
   clicksService: {

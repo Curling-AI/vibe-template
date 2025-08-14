@@ -26,10 +26,15 @@ root/                       -> The project directory
 │   │   └── ThemeProvider.tsx -> Theme context provider
 │   ├── stores/             -> All component state, both shared and page specific, must live here. Use zustand stores.
 │   │   ├── clickStore.ts   -> Click counter store example
+│   │   ├── authStore.ts    -> Authentication store with Supabase integration
 │   │   └── index.ts        -> Store exports
 │   ├── services/           -> All data persistence, fetch, model logic must be defined here before being used inside stores.
 │   │   ├── api.ts          -> Base API configuration
 │   │   ├── clicksService.ts -> Clicks API service
+│   │   ├── auth/           -> Supabase authentication services
+│   │   │   ├── types.ts    -> Authentication type definitions
+│   │   │   ├── config.ts   -> Supabase client configuration
+│   │   │   └── authService.ts -> Authentication service methods
 │   │   ├── types.ts        -> TypeScript type definitions
 │   │   └── index.ts        -> Service exports
 │   ├── App.tsx             -> The Main App component, contains routing configuration with Layout, pages and providers
@@ -52,7 +57,11 @@ root/                       -> The project directory
 │   │   └── api.test.ts     -> API endpoint tests
 │   ├── app/                -> Frontend tests
 │   │   ├── services/       -> Service layer tests
+│   │   │   ├── authService.test.ts -> Supabase authentication service tests
+│   │   │   └── other service tests
 │   │   └── stores/         -> Store tests
+│   │       ├── authStore.test.ts -> Authentication store tests
+│   │       └── other store tests
 │   └── setup.ts            -> Test configuration
 ├── index.html              -> The main HTML file where the app will be rendered
 ├── tailwind.config.js      -> The tailwind configuration, contains the theme config
@@ -65,11 +74,12 @@ root/                       -> The project directory
 #### Frontend
 - **React 19** with TypeScript
 - **React Router v7** with Layout component
-- **Zustand** for state management (clickStore example)
+- **Zustand** for state management (clickStore, authStore)
 - **Tailwind CSS 3** with dark/light theme support
 - **Shadcn/ui components** (Button, Dialog)
 - **Theme system** with automatic/manual switching
 - **API services** with error handling
+- **Supabase authentication** with OAuth, magic links, session management
 
 #### Backend (BFF)
 - **Express.js 5.0** with TypeScript
@@ -87,7 +97,16 @@ root/                       -> The project directory
 #### Available API Endpoints
 - GET /health - Server health check
 - GET /info - Application information
-- Other example endpoints to be raplaced and serve as a reference
+- Other example endpoints to be replaced and serve as a reference
+
+#### Authentication (Supabase)
+- **Login/SignUp** with email and password
+- **OAuth providers** (Google, GitHub, Facebook, etc.)
+- **Magic links** for passwordless authentication
+- **Password reset** functionality
+- **Session management** with automatic refresh
+- **User profile** updates and management
+- **Persistent authentication** state with Zustand
 
 ### Project guidelines
 
@@ -126,6 +145,16 @@ root/                       -> The project directory
 - Use context for intermediate state sharing when prop drilling becomes cumbersome.
 - Create stores in `src/stores/` with proper TypeScript typing.
 - Use services in `src/services/` for API communication before using in stores.
+
+#### Authentication (Supabase)
+- Use `useAuthStore` for authentication state management
+- Initialize authentication with `initializeAuth()` in the root component
+- Implement login/logout/signup with proper error handling
+- Use OAuth providers for social authentication (Google, GitHub, etc.)
+- Implement magic links for passwordless authentication
+- Handle session persistence and automatic refresh
+- Configure Supabase with environment variables: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+- Use proper TypeScript types from `@supabase/supabase-js`
 
 #### Backend Development (BFF)
 - Use Express.js 5.0 with TypeScript for the Backend For Frontend.
