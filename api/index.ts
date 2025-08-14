@@ -3,7 +3,7 @@ import { CONFIG } from './config'
 
 const startServer = () => {
   try {
-    const server = app.listen(CONFIG.PORT, () => {
+    const server = app.listen(CONFIG.PORT, '0.0.0.0', () => {
       console.log('🚀 Servidor BFF iniciado com sucesso!')
       console.log(`📍 URL: http://localhost:${CONFIG.PORT}`)
       console.log(`🌍 Ambiente: ${CONFIG.NODE_ENV}`)

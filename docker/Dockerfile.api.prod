@@ -1,0 +1,45 @@
+# Multi-stage build para produção da API
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+
+# Copiar arquivos de dependências
+COPY package*.json ./
+COPY tsconfig*.json ./
+
+# Instalar todas as dependências (incluindo devDependencies para build)
+RUN npm ci
+
+# Copiar código fonte
+COPY . .
+
+# Build da aplicação
+RUN npm run build
+
+# Estágio de produção
+FROM node:22-alpine AS production
+
+WORKDIR /app
+
+# Criar usuário não-root para segurança
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Copiar arquivos de dependências
+COPY package*.json ./
+
+# Instalar apenas dependências de produção
+RUN npm ci --omit=dev && npm cache clean --force
+
+# Copiar arquivos buildados
+COPY --from=builder /app/dist ./dist
+
+# Mudar proprietário dos arquivos
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+# Expor porta
+EXPOSE 3001
+
+# Comando para produção
+CMD ["npm", "run", "start:api"]

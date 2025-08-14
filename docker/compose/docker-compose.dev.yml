@@ -1,0 +1,38 @@
+services:
+  frontend:
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile.frontend.dev
+    env_file:
+      - ../../.env
+    ports:
+      - '${FRONTEND_PORT:-5173}:5173'
+    volumes:
+      - ../..:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - api
+    networks:
+      - vibe-network
+
+  api:
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile.api.dev
+    env_file:
+      - ../../.env
+    ports:
+      - '${API_PORT:-3001}:3001'
+    volumes:
+      - ../..:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    networks:
+      - vibe-network
+
+networks:
+  vibe-network:
+    driver: bridge

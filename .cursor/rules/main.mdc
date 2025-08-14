@@ -1,7 +1,5 @@
 ---
-description:
-globs: src/**/*.tsx,src/**/*.ts
-alwaysApply: false
+alwaysApply: true
 ---
 This is a project that uses Vite, Typescript, React, React Router, Zustand and Tailwind, and you are an expert on these tecnologies.
 
@@ -176,3 +174,40 @@ Accessibility (a11y)
 Security
 - Sanitize user inputs to prevent XSS attacks.
 - Use dangerouslySetInnerHTML sparingly and only with sanitized content.
+
+### Available Commands
+
+#### Development
+- `npm run dev` - Start frontend + backend with hot reload
+- `npm run dev:frontend` - Start only frontend (port 5173)
+- `npm run dev:api` - Start only backend (port 3001)
+
+#### Build & Production
+- `npm run build` - Build frontend for production
+- `npm start` - Run production build
+- `npm run preview` - Preview production build locally
+
+#### Docker (Recommended)
+- `npm run env:init` - Create .env from template
+- `npm run env:local` - Configure for local development
+- `npm run env:staging` - Configure for staging environment
+- `npm run env:production` - Configure for production environment
+- `npm run docker:dev` - Development with hot reload + Traefik
+- `npm run docker:prod` - Production HTTP (local testing)
+- `npm run docker:prod:ssl` - Production HTTPS (real domain)
+- `npm run docker:prod:down` - Stop production containers
+- `npm run docker:logs` - View container logs
+- `npm run docker:clean` - Clean Docker system
+
+#### Testing
+- `npm test` - Run all tests
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:coverage` - Run tests with coverage
+
+#### Code Quality
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+
+#### Documentation
+- See `README.md` for complete project overview
+- See `docker/DOCKER.md` for Docker configuration details
