@@ -13,18 +13,25 @@ Template completo com React 19, TypeScript, Tailwind CSS, Zustand e Backend For 
 ## 🚀 Início Rápido
 
 ```bash
-# Instalar e executar
+# Instalar e configurar
 npm install
+
+# Configurar variáveis de ambiente (necessário para Supabase)
+# Crie um arquivo .env na raiz com:
+# VITE_API_BASE_URL=http://localhost:3001
+# VITE_SUPABASE_URL=your_supabase_project_url
+# VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
 npm run dev              # Frontend + Backend (localhost:5173 + localhost:3001)
 
 # Docker (recomendado)
-npm run env:init         # Configurar .env
+npm run env:init         # Configurar .env automaticamente
 npm run docker:dev       # Desenvolvimento com Traefik
 npm run docker:prod      # Produção com proxy reverso
 
 # Build e testes
 npm run build            # Build produção
-npm test                 # Executar testes
+npm test                 # Executar testes (fallbacks automáticos para CI)
 ```
 
 ## 📁 Estrutura

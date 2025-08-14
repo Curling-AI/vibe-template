@@ -115,4 +115,23 @@ interface StoreState {
 
 ---
 
+## Variáveis de Ambiente para Testes
+
+**Decisão**: Usar fallbacks automáticos no CI/CD
+**Data**: Correção GitHub Actions
+**Razão**:
+
+- CI/CD não deve depender de arquivos .env
+- Fallbacks garantem testes funcionais
+- Flexibilidade entre desenvolvimento local e CI
+
+**Padrão Estabelecido**:
+
+- `vite.config.ts` - Variáveis no config do Vitest
+- `tests/setup.ts` - Mock do import.meta.env com vi.stubGlobal
+- Fallbacks: VITE_API_BASE_URL=http://localhost:3001
+- Variáveis de teste não conflitam com produção
+
+---
+
 _Atualize este arquivo sempre que tomar decisões arquiteturais importantes._
