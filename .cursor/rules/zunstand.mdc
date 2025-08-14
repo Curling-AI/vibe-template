@@ -3,9 +3,20 @@ description:
 globs: src/stores/**/*.ts
 alwaysApply: false
 ---
-# Important State Management Rules
-- Use Zustand for global state management.
-- Keep state small
-- Split state into multiple files when it gets too big
-- Lift state up when needed to share state between components.
-- Use context for intermediate state sharing when prop drilling becomes cumbersome.
+# Zustand State Management Rules
+
+## Store Structure
+- Use `create` with `combine` middleware for TypeScript support
+- Separate interfaces: `State`, `Actions`, and combined `Store` type
+- Place stores in `src/stores/` with descriptive names (e.g., `clickStore.ts`)
+
+## State Organization
+- Include data, loading states (`isLoading`), and error states (`error: string | null`)
+- Use services from `src/services/` for API calls within store actions
+- Return meaningful values from async actions for component usage
+
+## Best Practices
+- Keep stores focused (single responsibility)
+- Split large stores into multiple files
+- Use TypeScript interfaces for better type safety
+- Export custom hooks for specific state slices when needed

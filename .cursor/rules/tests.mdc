@@ -1,0 +1,242 @@
+---
+globs: tests/**/*.test.ts,tests/**/*.test.tsx
+alwaysApply: false
+---
+
+# Testing Guidelines and Best Practices
+
+This project follows a focused testing approach that prioritizes business logic and API functionality over UI testing.
+
+## 🎯 Testing Scope - IMPORTANT
+
+### ✅ WHAT TO TEST
+- **API Endpoints** (Backend) - Test all routes, status codes, responses, error handling
+- **Services** (Frontend) - Test API communication, data transformation, error propagation
+- **Stores** (Zustand) - Test state management, actions, side effects, error states
+
+### ❌ WHAT NOT TO TEST (DO NOT CREATE UI TESTS)
+- **Components** - Avoid testing React components and UI interactions
+- **Pages** - Do not test page components or user interactions
+- **UI Behavior** - Skip testing clicks, form submissions, visual elements
+- **Rendering** - Avoid testing component rendering or DOM manipulation
+
+## 📁 Test Structure
+
+```
+tests/
+├── api/                    # Backend API tests
+│   └── *.test.ts          # Express route testing with Supertest
+├── app/                   # Frontend logic tests
+│   ├── services/          # Service layer tests
+│   │   └── *.test.ts      # API service tests with mocked dependencies
+│   └── stores/            # State management tests
+│       └── *.test.ts      # Zustand store tests with mocked services
+└── setup.ts               # Global test configuration
+```
+
+## 🛠️ Testing Tools and Framework
+
+### Core Testing Stack
+- **Vitest** - Primary testing framework (faster than Jest, Vite-based)
+- **Supertest** - HTTP assertions for API endpoint testing
+- **vi.mock() or vi.fn()** - Vitest mocking system for dependencies
+- **TypeScript** - Full type safety in tests
+
+### Configuration
+- **Environment**: Node.js for all tests (no jsdom/browser environment)
+- **Globals**: `describe`, `it`, `expect`, `beforeEach`, `afterEach` available globally
+- **Setup**: `tests/setup.ts` for global test configuration
+- **Coverage**: Focus on business logic coverage, not UI coverage
+
+## 📋 Testing Best Practices
+
+### API Tests (Backend)
+```typescript
+// Good API test example
+describe('API Routes', () => {
+  describe('GET /api/v1/resource', () => {
+    it('should return 200 with valid data structure', async () => {
+      const response = await request(app)
+        .get('/api/v1/resource')
+        .expect(200)
+
+      expect(response.body).toHaveProperty('data')
+      expect(response.body).toHaveProperty('message')
+    })
+
+    it('should handle errors with proper status codes', async () => {
+      const response = await request(app)
+        .get('/api/v1/invalid-endpoint')
+        .expect(404)
+
+      expect(response.body).toHaveProperty('error')
+    })
+  })
+})
+```
+
+### Service Tests (Frontend)
+```typescript
+// Good service test example
+vi.mock('../../../src/services/api', () => ({
+  api: {
+    get: vi.fn(),
+    post: vi.fn(),
+  }
+}))
+
+describe('DataService', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('should fetch data successfully', async () => {
+    mockApi.get.mockResolvedValueOnce({ data: mockData })
+
+    const result = await dataService.getData()
+
+    expect(mockApi.get).toHaveBeenCalledWith('/data')
+    expect(result).toEqual({ data: mockData })
+  })
+
+  it('should propagate API errors', async () => {
+    const error = new Error('Network error')
+    mockApi.get.mockRejectedValueOnce(error)
+
+    await expect(dataService.getData()).rejects.toThrow('Network error')
+  })
+})
+```
+
+### Store Tests (Zustand)
+```typescript
+// Good store test example
+describe('DataStore', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    useDataStore.setState(initialState)
+  })
+
+  it('should update state correctly on successful fetch', async () => {
+    mockDataService.getData.mockResolvedValueOnce({ data: mockData })
+
+    await useDataStore.getState().fetchData()
+
+    expect(useDataStore.getState().data).toEqual(mockData)
+    expect(useDataStore.getState().isLoading).toBe(false)
+    expect(useDataStore.getState().error).toBe(null)
+  })
+
+  it('should handle loading states properly', async () => {
+    let resolvePromise: (value: unknown) => void
+    const promise = new Promise((resolve) => {
+      resolvePromise = resolve
+    })
+    mockDataService.getData.mockReturnValueOnce(promise)
+
+    useDataStore.getState().fetchData()
+
+    expect(useDataStore.getState().isLoading).toBe(true)
+
+    resolvePromise!({ data: mockData })
+    await promise
+
+    expect(useDataStore.getState().isLoading).toBe(false)
+  })
+})
+```
+
+## 🔧 Testing Guidelines
+
+### General Rules
+1. **Focus on Logic**: Test business logic, data flow, and error handling
+2. **Mock Dependencies**: Always mock external dependencies (APIs, services)
+3. **Test Edge Cases**: Include error scenarios, empty data, network failures
+4. **Descriptive Names**: Use clear, descriptive test names that explain the scenario
+5. **Clean Setup**: Reset state and mocks between tests using `beforeEach`
+
+### API Testing Rules
+- Test all HTTP methods and status codes
+- Verify request/response data structures
+- Test authentication and authorization
+- Include CORS and middleware behavior
+- Test error responses and edge cases
+
+### Service Testing Rules
+- Mock the base API layer (`api.ts`)
+- Test data transformation and mapping
+- Verify error propagation from API to service
+- Test retry logic and timeout handling
+- Include validation and sanitization tests
+
+### Store Testing Rules
+- Mock service dependencies completely
+- Test all actions and state mutations
+- Verify loading states and error handling
+- Test derived state and computed values
+- Include state persistence if applicable
+
+### Performance and Organization
+- Keep tests fast by avoiding unnecessary async operations
+- Group related tests with proper `describe` blocks
+- Use consistent naming conventions
+- Maintain test isolation (no shared state between tests)
+- Write tests that are easy to maintain and understand
+
+## 🚫 Anti-Patterns to Avoid
+
+### DON'T Test UI Components
+```typescript
+// ❌ BAD - Don't do this
+describe('Button Component', () => {
+  it('should render with correct text', () => {
+    render(<Button>Click me</Button>)
+    expect(screen.getByText('Click me')).toBeInTheDocument()
+  })
+})
+```
+
+### DON'T Test User Interactions
+```typescript
+// ❌ BAD - Don't do this
+describe('Form Component', () => {
+  it('should submit form on button click', async () => {
+    render(<Form />)
+    fireEvent.click(screen.getByRole('button'))
+    await waitFor(() => expect(mockSubmit).toHaveBeenCalled())
+  })
+})
+```
+
+### DON'T Test Visual Aspects
+```typescript
+// ❌ BAD - Don't do this
+describe('Theme Toggle', () => {
+  it('should change appearance in dark mode', () => {
+    render(<ThemeToggle />)
+    expect(container.firstChild).toHaveClass('dark-theme')
+  })
+})
+```
+
+## ✅ Focus Areas Summary
+
+**Priority 1: API Logic**
+- Route handlers and middleware
+- Request/response validation
+- Error handling and status codes
+- Authentication and security
+
+**Priority 2: Service Layer**
+- Data fetching and transformation
+- Error propagation and handling
+- API communication patterns
+- Business logic implementation
+
+**Priority 3: State Management**
+- Store actions and mutations
+- Async state handling
+- Error states and loading states
+- Data persistence and hydration
+
+Remember: We test the **what** (functionality) not the **how** (UI implementation).

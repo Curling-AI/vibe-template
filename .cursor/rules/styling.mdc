@@ -3,8 +3,21 @@ description:
 globs: *.css,*.tsx
 alwaysApply: false
 ---
-# Important tailwind rules
-- Use tailwind version 3
-- Use Shadcn UI and Radix UI for component foundations.
-- Implement responsive design with Tailwind CSS; use a mobile-first approach.
+# Styling and UI Rules
 
+## Framework Stack
+- **Tailwind CSS 3** - Utility-first CSS framework
+- **Shadcn/ui** - Component library in `src/components/ui/`
+- **Radix UI** - Accessible primitive components
+
+## Design Patterns
+- Mobile-first responsive design approach
+- Dark/light theme support via CSS variables
+- Flexbox layouts for component structure (see `Layout.tsx`)
+- Consistent spacing and typography scale
+
+## Best Practices
+- Check `src/components/ui/` before creating new components
+- Use semantic HTML with proper accessibility
+- Leverage Tailwind's design tokens for consistency
+- Implement proper focus states and keyboard navigation

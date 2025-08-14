@@ -5,26 +5,91 @@ alwaysApply: false
 ---
 This is a project that uses Vite, Typescript, React, React Router, Zustand and Tailwind, and you are an expert on these tecnologies.
 
+This is a full-stack template with Frontend (React) + Backend For Frontend (Express.js) + Testing (Vitest).
+
 ### Project structure
 
 root/                       -> The project directory
 ├── public/                 -> Where the static assets like images and icons go
-├── src/                    -> The main application source code directory
-│   ├── assets/             -> The static assetts that need to be processed by the vite build tool goes here
+├── src/                    -> The main application source code directory (Frontend)
+│   ├── assets/             -> The static assets that need to be processed by the vite build tool goes here
 │   ├── components/         -> All the reusable components must live in this directory
-│   │   ├── ui/             -> The shadcn components are installed and accessible in his directory, check here before creating a new component
+│   │   ├── ui/             -> The shadcn components are installed and accessible in this directory, check here before creating a new component
+│   │   ├── Layout.tsx      -> Main layout component to centralize layout components and providers
+│   │   └── ThemeToggle.tsx -> Theme switcher component
 │   ├── hooks/              -> Reusable React hooks go here
+│   │   └── useTheme.ts     -> Custom hook for theme management
 │   ├── lib/                -> Reusable modules go here
+│   │   └── utils.ts        -> Utility functions (cn, etc.)
 │   ├── pages/              -> All page components must live here
-│   ├── providers/          -> Visual component data that must available to all component tree
+│   │   ├── Index.tsx       -> Home page (Example page, change the content and styles to your own)
+│   │   └── About.tsx       -> About page (Example page, you can remove it if you don't need it)
+│   ├── providers/          -> React context providers that must be available to all component tree
+│   │   └── ThemeProvider.tsx -> Theme context provider
 │   ├── stores/             -> All component state, both shared and page specific, must live here. Use zustand stores.
+│   │   ├── clickStore.ts   -> Click counter store example
+│   │   └── index.ts        -> Store exports
 │   ├── services/           -> All data persistence, fetch, model logic must be defined here before being used inside stores.
-│   ├── App.tsx             -> The Main App component, it contains the routing configuration, pages and providers instantiation
+│   │   ├── api.ts          -> Base API configuration
+│   │   ├── clicksService.ts -> Clicks API service
+│   │   ├── types.ts        -> TypeScript type definitions
+│   │   └── index.ts        -> Service exports
+│   ├── App.tsx             -> The Main App component, contains routing configuration with Layout, pages and providers
 │   ├── index.css           -> The main application styles (mostly theme and animation configuration). Use tailwind.
-│   ├── main.tsx            -> The main App entripoint (instantiation)
+│   ├── main.tsx            -> The main App entrypoint (instantiation)
+│   └── vite-env.d.ts       -> Vite environment type definitions
+├── api/                    -> Backend For Frontend (BFF) with Express.js
+│   ├── config/             -> API configuration
+│   │   └── index.ts        -> Centralized configuration management
+│   ├── middleware/         -> Express middlewares
+│   │   ├── cors.ts         -> CORS configuration
+│   │   └── errorHandler.ts -> Global error handling
+│   ├── routes/             -> API route definitions
+│   │   ├── health.ts       -> Health check endpoints
+│   │   └── api.ts          -> Main API routes
+│   ├── app.ts              -> Express app configuration
+│   └── index.ts            -> Server entry point
+├── tests/                  -> Test files (Vitest)
+│   ├── api/                -> Backend API tests
+│   │   └── api.test.ts     -> API endpoint tests
+│   ├── app/                -> Frontend tests
+│   │   ├── services/       -> Service layer tests
+│   │   └── stores/         -> Store tests
+│   └── setup.ts            -> Test configuration
 ├── index.html              -> The main HTML file where the app will be rendered
 ├── tailwind.config.js      -> The tailwind configuration, contains the theme config
+├── vite.config.ts          -> Vite configuration including Vitest setup
+├── package.json            -> Dependencies and scripts
 └── Other config files...
+
+### Current Project Features
+
+#### Frontend
+- **React 19** with TypeScript
+- **React Router v7** with Layout component
+- **Zustand** for state management (clickStore example)
+- **Tailwind CSS 3** with dark/light theme support
+- **Shadcn/ui components** (Button, Dialog)
+- **Theme system** with automatic/manual switching
+- **API services** with error handling
+
+#### Backend (BFF)
+- **Express.js 5.0** with TypeScript
+- **CORS** and security middlewares
+- **Health check** endpoints
+- **API routes** for clicks management
+- **Error handling** middleware
+
+#### Testing
+- **Vitest** for unit and integration tests
+- **Supertest** for API testing
+- **Mock** system for services and stores
+- **Test coverage** for API, services, and stores only
+
+#### Available API Endpoints
+- GET /health - Server health check
+- GET /info - Application information
+- Other example endpoints to be raplaced and serve as a reference
 
 ### Project guidelines
 
@@ -61,6 +126,23 @@ root/                       -> The project directory
 - Use Zustand for global state management.
 - Lift state up when needed to share state between components.
 - Use context for intermediate state sharing when prop drilling becomes cumbersome.
+- Create stores in `src/stores/` with proper TypeScript typing.
+- Use services in `src/services/` for API communication before using in stores.
+
+#### Backend Development (BFF)
+- Use Express.js 5.0 with TypeScript for the Backend For Frontend.
+- Place all backend code in the `api/` directory.
+- Use proper middleware for CORS, security, and error handling.
+- Create routes in `api/routes/` and configure them in `api/app.ts`.
+- Implement health check endpoints for monitoring.
+- Use centralized configuration in `api/config/index.ts`.
+
+#### Testing Guidelines
+- Write tests for API endpoints, services, and stores only.
+- Use Vitest for testing framework with Supertest for API tests.
+- Place tests in `tests/` directory with proper structure.
+- Mock dependencies appropriately using `vi.mock()`.
+- Test error handling and edge cases thoroughly.
 
 #### UI and Styling
 - Use Shadcn UI and Radix UI for component foundations.
