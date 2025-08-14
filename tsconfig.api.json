@@ -3,12 +3,12 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2022",
     "lib": ["ES2023"],
-    "module": "ESNext",
+    "module": "preserve",
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
-    "verbatimModuleSyntax": true,
+    "moduleResolution": "node",
+    "verbatimModuleSyntax": false,
     "moduleDetection": "force",
 
     /* Linting */
@@ -18,6 +18,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "outDir": "./dist/api"
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true
   },
   "include": ["api"]
 }
