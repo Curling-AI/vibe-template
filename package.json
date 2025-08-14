@@ -16,6 +16,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "prepare": "husky || true",
     "test": "vitest run",
     "docker:dev": "docker compose -f docker/compose/docker-compose.dev.yml up --build",

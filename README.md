@@ -145,7 +145,7 @@ contexts/
 
 ```bash
 # Os workflows executam automaticamente:
-npm run lint && npm run format -- --check
+npm run lint && npx prettier --check .
 npm run test && npm run build
 ```
 
