@@ -13,6 +13,18 @@ echo "🔧 Configurando variáveis de ambiente: $ENVIRONMENT"
 
 case $ENVIRONMENT in
   "local")
+    read -p "🔒 Usar HTTPS para URLs locais? (y/N): " USE_HTTPS_LOCAL
+
+    if [[ $USE_HTTPS_LOCAL =~ ^[Yy]$ ]]; then
+      PROTOCOL="https"
+      SSL_ENABLED=true
+      HTTPS_REDIRECT=true
+    else
+      PROTOCOL="http"
+      SSL_ENABLED=false
+      HTTPS_REDIRECT=false
+    fi
+
     cat > $ENV_FILE << EOF
 # Configurações de Ambiente - Desenvolvimento Local
 NODE_ENV=development
@@ -25,16 +37,16 @@ TRAEFIK_DOMAIN=localhost:8080
 
 # SSL / Certificados
 LETSENCRYPT_EMAIL=dev@localhost
-SSL_ENABLED=false
+SSL_ENABLED=$SSL_ENABLED
 LETSENCRYPT_STAGING=true
 
 # Traefik
 TRAEFIK_DASHBOARD_ENABLED=true
-HTTPS_REDIRECT_ENABLED=false
+HTTPS_REDIRECT_ENABLED=$HTTPS_REDIRECT
 
 # Frontend
-FRONTEND_URL=http://localhost:5173
-VITE_API_BASE_URL=http://localhost:3001
+FRONTEND_URL=$PROTOCOL://localhost:5173
+VITE_API_BASE_URL=$PROTOCOL://localhost:3001
 
 # Portas de desenvolvimento
 FRONTEND_PORT=5173
@@ -46,14 +58,27 @@ VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 EOF
     echo "✅ Configuração local criada em $ENV_FILE"
-    echo "🌐 Frontend: http://localhost"
-    echo "🌐 API: http://api.localhost"
+    echo "🌐 Frontend: $PROTOCOL://localhost"
+    echo "🌐 API: $PROTOCOL://api.localhost"
     echo "🌐 Traefik: http://traefik.localhost:8080"
     ;;
 
     "staging")
     read -p "📝 Digite o domínio base (ex: myapp.com): " BASE_DOMAIN
     read -p "📧 Digite o email para Let's Encrypt: " EMAIL
+    read -p "🔒 Usar HTTPS para URLs? (Y/n): " USE_HTTPS_STAGING
+
+    if [[ $USE_HTTPS_STAGING =~ ^[Nn]$ ]]; then
+      PROTOCOL="http"
+      SSL_ENABLED=false
+      HTTPS_REDIRECT=false
+      LETSENCRYPT_STAGING_MODE=false
+    else
+      PROTOCOL="https"
+      SSL_ENABLED=true
+      HTTPS_REDIRECT=true
+      LETSENCRYPT_STAGING_MODE=true
+    fi
 
     cat > $ENV_FILE << EOF
 # Configurações de Ambiente - Staging
@@ -67,16 +92,16 @@ TRAEFIK_DOMAIN=traefik-staging.$BASE_DOMAIN
 
 # SSL / Certificados
 LETSENCRYPT_EMAIL=$EMAIL
-SSL_ENABLED=true
-LETSENCRYPT_STAGING=true
+SSL_ENABLED=$SSL_ENABLED
+LETSENCRYPT_STAGING=$LETSENCRYPT_STAGING_MODE
 
 # Traefik
 TRAEFIK_DASHBOARD_ENABLED=true
-HTTPS_REDIRECT_ENABLED=true
+HTTPS_REDIRECT_ENABLED=$HTTPS_REDIRECT
 
 # Frontend
-FRONTEND_URL=https://staging.$BASE_DOMAIN
-VITE_API_BASE_URL=https://api-staging.$BASE_DOMAIN
+FRONTEND_URL=$PROTOCOL://staging.$BASE_DOMAIN
+VITE_API_BASE_URL=$PROTOCOL://api-staging.$BASE_DOMAIN
 
 # Portas
 FRONTEND_PORT=5173
@@ -88,15 +113,28 @@ VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 EOF
     echo "✅ Configuração staging criada em $ENV_FILE"
-    echo "🌐 Frontend: https://staging.$BASE_DOMAIN"
-    echo "🌐 API: https://api-staging.$BASE_DOMAIN"
+    echo "🌐 Frontend: $PROTOCOL://staging.$BASE_DOMAIN"
+    echo "🌐 API: $PROTOCOL://api-staging.$BASE_DOMAIN"
     echo "🌐 Traefik: http://traefik-staging.$BASE_DOMAIN:8080"
     ;;
 
     "production")
     read -p "📝 Digite o domínio base (ex: myapp.com): " BASE_DOMAIN
     read -p "📧 Digite o email para Let's Encrypt: " EMAIL
+    read -p "🔒 Usar HTTPS para URLs? (Y/n): " USE_HTTPS_PRODUCTION
     read -p "🔒 Habilitar dashboard Traefik? (y/N): " ENABLE_DASHBOARD
+
+    if [[ $USE_HTTPS_PRODUCTION =~ ^[Nn]$ ]]; then
+      PROTOCOL="http"
+      SSL_ENABLED=false
+      HTTPS_REDIRECT=false
+      LETSENCRYPT_STAGING_MODE=false
+    else
+      PROTOCOL="https"
+      SSL_ENABLED=true
+      HTTPS_REDIRECT=true
+      LETSENCRYPT_STAGING_MODE=false
+    fi
 
     if [[ $ENABLE_DASHBOARD =~ ^[Yy]$ ]]; then
       DASHBOARD_ENABLED=true
@@ -116,16 +154,16 @@ TRAEFIK_DOMAIN=traefik.$BASE_DOMAIN
 
 # SSL / Certificados
 LETSENCRYPT_EMAIL=$EMAIL
-SSL_ENABLED=true
-LETSENCRYPT_STAGING=false
+SSL_ENABLED=$SSL_ENABLED
+LETSENCRYPT_STAGING=$LETSENCRYPT_STAGING_MODE
 
 # Traefik
 TRAEFIK_DASHBOARD_ENABLED=$DASHBOARD_ENABLED
-HTTPS_REDIRECT_ENABLED=true
+HTTPS_REDIRECT_ENABLED=$HTTPS_REDIRECT
 
 # Frontend
-FRONTEND_URL=https://$BASE_DOMAIN
-VITE_API_BASE_URL=https://api.$BASE_DOMAIN
+FRONTEND_URL=$PROTOCOL://$BASE_DOMAIN
+VITE_API_BASE_URL=$PROTOCOL://api.$BASE_DOMAIN
 
 # Portas
 FRONTEND_PORT=5173
@@ -137,8 +175,8 @@ VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 EOF
     echo "✅ Configuração produção criada em $ENV_FILE"
-    echo "🌐 Frontend: https://$BASE_DOMAIN"
-    echo "🌐 API: https://api.$BASE_DOMAIN"
+    echo "🌐 Frontend: $PROTOCOL://$BASE_DOMAIN"
+    echo "🌐 API: $PROTOCOL://api.$BASE_DOMAIN"
     if [[ $DASHBOARD_ENABLED == "true" ]]; then
       echo "🌐 Traefik: http://traefik.$BASE_DOMAIN:8080"
     fi

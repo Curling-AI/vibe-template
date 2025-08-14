@@ -18,6 +18,10 @@ export default defineConfig({
     environment: 'node',
     setupFiles: ['./tests/setup.ts'],
     globals: true,
+    env: {
+      // Permite que o Vitest acesse variáveis de ambiente durante os testes
+      NODE_ENV: 'test',
+    },
   },
   resolve: {
     alias: {

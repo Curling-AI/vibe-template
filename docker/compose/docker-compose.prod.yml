@@ -29,6 +29,8 @@ services:
       dockerfile: docker/Dockerfile.frontend.prod
       args:
         - VITE_API_BASE_URL=${VITE_API_BASE_URL}
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+        - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
     env_file:
       - ../../.env
     environment:

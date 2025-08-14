@@ -25,7 +25,7 @@ describe('API Service', () => {
       const result = await apiRequest('/clicks')
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3001/api/v1/clicks',
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/clicks`,
         expect.objectContaining({
           headers: expect.objectContaining({
             'Content-Type': 'application/json',
@@ -72,7 +72,10 @@ describe('API Service', () => {
 
       await apiRequest('/api/custom')
 
-      expect(mockFetch).toHaveBeenCalledWith('http://localhost:3001/api/custom', expect.any(Object))
+      expect(mockFetch).toHaveBeenCalledWith(
+        `${import.meta.env.VITE_API_BASE_URL}/api/custom`,
+        expect.any(Object),
+      )
     })
 
     it('deve construir URL corretamente para endpoints sem /api', async () => {
@@ -84,7 +87,7 @@ describe('API Service', () => {
       await apiRequest('/clicks')
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3001/api/v1/clicks',
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/clicks`,
         expect.any(Object),
       )
     })
