@@ -135,7 +135,7 @@ npm run docker:prod      # Produção com proxy (localhost)
 - **Benefícios**: Continuidade entre sessões • Histórico de decisões • Padrões estabelecidos
 
 ```bash
-contexts/
+docs/contexts/
 ├── feature-auth.md          # Contexto da implementação de auth
 ├── refactor-stores.md       # Planejamento de refatoração
 └── decisions.md             # Decisões arquiteturais

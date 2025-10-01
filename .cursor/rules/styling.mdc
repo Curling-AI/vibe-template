@@ -18,6 +18,7 @@ alwaysApply: false
 
 ## Best Practices
 - Check `src/components/ui/` before creating new components
+- To add new components execute the `npx shadcn@latest add <component>` command (e.g. `npx shadcn@latest add accordion`)
 - Use semantic HTML with proper accessibility
 - Leverage Tailwind's design tokens for consistency
 - Implement proper focus states and keyboard navigation

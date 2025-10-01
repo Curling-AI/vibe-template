@@ -16,7 +16,7 @@ Este diretório armazena contexto e planejamento para desenvolvimento contínuo 
 Crie arquivos `.md` para diferentes contextos:
 
 ```bash
-contexts/
+docs/contexts/
 ├── feature-[nome].md        # Contexto de features específicas
 ├── refactor-[area].md       # Planejamento de refatorações
 ├── bug-[id].md             # Contexto de bugs complexos
@@ -24,7 +24,34 @@ contexts/
 └── patterns.md             # Padrões estabelecidos
 ```
 
-### 2. **Template de Feature**
+### 2. **Contexto de Ferramentas Específicas**
+
+#### Cursor
+
+O Cursor é o assistente AI principal deste projeto, e sua atuação é guiada por regras detalhadas localizadas no diretório `.cursor/`. Os arquivos `.cursor/rules/*.mdc` definem padrões obrigatórios de arquitetura, estilo, testes, uso de Zustand, integração com Supabase, entre outros.
+**Como integrar com contextos:**
+
+- Sempre consulte os arquivos de contexto em `docs/contexts/` antes de executar qualquer tarefa.
+- As regras do Cursor têm precedência, mas devem ser aplicadas em harmonia com decisões e padrões documentados nos contextos.
+- Ao implementar novas features ou refatorações, registre decisões relevantes em `decisions.md` ou crie um novo arquivo de contexto.
+- Se houver conflito entre regras do Cursor e contexto, registre o caso em `decisions.md` para revisão.
+
+#### Claude.md / Agents.md / Gemini.md
+
+Esses arquivos servem para documentar o uso e integração de outros agentes de IA no projeto.
+
+- **Claude.md**:
+  Documente práticas, limitações e instruções específicas para uso do Claude, seguindo referências como [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices). Inclua exemplos de prompts, padrões de resposta e integração com o fluxo do projeto.
+
+- **Agents.md**:
+  Use para registrar diretrizes gerais de integração de múltiplos agentes, inspirando-se em modelos como [agents.md](https://agents.md/). Detalhe como diferentes agentes devem colaborar, dividir tarefas e compartilhar contexto.
+
+- **Gemini.md**:
+  Especifique particularidades, comandos e melhores práticas para uso do Gemini, incluindo exemplos de integração e limitações conhecidas.
+
+Mantenha esses arquivos atualizados para garantir colaboração eficiente, rastreabilidade e padronização no uso de múltiplos assistentes AI.
+
+### 3. **Template de Feature**
 
 ```markdown
 # Feature: [Nome da Feature]
@@ -50,7 +77,7 @@ contexts/
 - Problemas encontrados
 ```
 
-### 3. **Template de Refatoração**
+### 4. **Template de Refatoração**
 
 ```markdown
 # Refatoração: [Área/Componente]

@@ -63,7 +63,9 @@ root/                       -> The project directory
 │   │       ├── authStore.test.ts -> Authentication store tests
 │   │       └── other store tests
 │   └── setup.ts            -> Test configuration
-├── contexts/               -> ⚠️  AI ASSISTANT CONTEXT - ALWAYS CONSULT!
+├── docs/                   -> Project documentation
+│   ├── api/                -> Bruno API Documentation
+│   └── contexts/           -> ⚠️  AI ASSISTANT CONTEXT - ALWAYS CONSULT!
 ├── index.html              -> The main HTML file where the app will be rendered
 ├── tailwind.config.js      -> The tailwind configuration, contains the theme config
 ├── vite.config.ts          -> Vite configuration including Vitest setup
@@ -111,19 +113,19 @@ root/                       -> The project directory
 
 ### 🚨 CRITICAL RULE: Mandatory Context Consultation
 
-**ALWAYS consult the `contexts/` directory BEFORE executing any task.**
+**ALWAYS consult the `docs/contexts/` directory BEFORE executing any task.**
 
 #### Mandatory Flow:
-1. **Session start**: Execute `list_dir contexts/` or `read_file contexts/README.md`
+1. **Session start**: Execute `list_dir_contexts/` or `read_file docs/contexts/README.md`
 2. **Check context**: Read relevant files for the current task
 3. **Follow patterns**: Use documented decisions and patterns
 4. **Update context**: Document significant changes
 
 #### Context Files:
-- `contexts/README.md` - Context system usage guide
-- `contexts/decisions.md` - Architectural decisions and patterns
-- `contexts/feature-*.md` - Context for specific features
-- `contexts/refactor-*.md` - Refactoring planning
+- `docs/contexts/README.md` - Context system usage guide
+- `docs/contexts/decisions.md` - Architectural decisions and patterns
+- `docs/contexts/feature-*.md` - Context for specific features
+- `docs/contexts/refactor-*.md` - Refactoring planning
 
 This rule ensures continuity, consistency and quality in development.
 
@@ -153,6 +155,7 @@ This rule ensures continuity, consistency and quality in development.
 - Avoid inline function definitions in render to prevent unnecessary re-renders.
 - Prefer composition over inheritance.
 - Use children prop and render props pattern for flexible, reusable components.
+- To add new shadcn components (`src/components/ui`) use the `npx shadcn@latest add <component>` command
 - Use refs sparingly and mainly for DOM access.
 - Implement error boundaries to catch and handle errors gracefully.
 - Use cleanup functions in useEffect to prevent memory leaks.
